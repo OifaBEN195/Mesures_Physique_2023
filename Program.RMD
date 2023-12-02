@@ -1,0 +1,61 @@
+# Vous trouverz ici le programme utilisant la fonction GGIR dans la visualisation de données accélérométriques
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+install.packages("GGIR", dependencies = TRUE)
+```
+```{r}
+install.packages("remotes")
+remotes::install_github("wadpac/GGIR")   # Installation du package GGIR 
+```
+```{r}
+library(GGIR)              # Chargement de la librairie GGIR 
+source("myscript.R")       # Script externe intégré dans la fonction
+GGIR(mode=c(1,2,3,4,5),    # 1.Etape respectif chargement des données, 2.Analyse de la qualité des données, 3.Estimation des périodes d'inactivité et                              # de sommeil, 4. Etiquette les périodes d'inactivité prolongées (sommeil, ou pendant la journée), 
+                           # 5. Apporte des caractéristiques (sommeil, activité physique ) 
+     
+      datadir="C:\\Users\\SCD UM\\Documents\\[HAH913E]Activite_physique\\Denis_mottet\\Mesures\\Mesures_p", 
+     # Specification du fichier de données d'entrée.
+      outputdir="C:/Users/SCD UM/Desktop/Res_Denis",                                                        
+     # Spécification du fichier de données de sortie.
+     f0=1,                  # Prend en compte tous les fichiers 
+     f1=0,
+      do.report=c(2,4,5),   # Génère le rapport selon les modes choisis
+     myfun=myfun,
+      #=====================
+      # Part 2
+      #=====================
+      strategy = 1,#
+      hrs.del.start = 0,          hrs.del.end = 0,        # Heures supprimées au début et à la fin de chaque jours 
+      maxdur = 9,                 includedaycrit = 16,    # Nombre d'heures portés 
+      qwindow=c(0,24),                                    # Fenêtre de quantification horaire de minuit à minuit 
+      mvpathreshold =c(100),                              # Seuil de mouvement 
+      excludefirstlast = FALSE,                           # False : N'exclue pas les premiers et deniers jours 
+      includenightcrit = 8,                               # Partie incluantles données nocturnes 
+      #=====================
+      # Part 3 + 4
+      #=====================
+      def.noc.sleep = 1,      # Analyse  des périodes de sommeil non-continu 
+      outliers.only = TRUE,   # Analyse les valeurs abbérantes du reste de l'ensemble de données 
+      criterror = 4,          # Marge d'erreur critique 
+      do.visual = TRUE,       # Visualisation du mode 4_ inactivité prolongée
+      #=====================
+      # Part 5
+      #=====================
+      threshold.lig = c(30), threshold.mod = c(100),  threshold.vig = c(400),  
+     # Seuils pour les activités légères , modérées et vigoureuses 
+      boutcriter = 0.8,      boutcriter.in = 0.9,     boutcriter.lig = 0.8,    
+     # critère global, critère spécifique  pour la détection de l'activité physique (AP)                                                                      et critère de période d'inactivité légère
+      boutcriter.mvpa = 0.8, boutdur.in = c(1,10,30), boutdur.lig = c(1,10),
+      boutdur.mvpa = c(1),                                                   
+     # Seuil d'AP intense à 0.8,  Seuils de durée d'AP d'intensité légère entre 1 et 10                                                                       minute , puis entre 10 et 30 minutes. Seuil de durée pour une inactivité physique                                                                       entre 1 et 10 minute ou plus. 
+      includedaycrit.part5 = 2/3,   # Valeur par défaut ; fraction d'heures de port du capteur 
+     
+      #=====================
+      # Visual report
+      #=====================
+      timewindow = c("WW"), # Jours définis du réveil au réveil afin de respecter les 24 heures d'enregistrement
+      visualreport=TRUE)    # Visualiser les rapports générés. 
